@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 template<class T>
 class Singleton{
@@ -10,7 +11,7 @@ public:
 		return m_spInstance;
 	}
 protected:
-	Singleton();
+	Singleton(){};
 	virtual ~Singleton(){
 		m_spInstance = nullptr;
 	}
