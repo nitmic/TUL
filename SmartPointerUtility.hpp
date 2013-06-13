@@ -4,8 +4,10 @@
 #include <memory>
 
 namespace{
-	template<class T>
-	void doNothing(T & p){};
+	struct doNothing{
+		template<class T>
+		void operator()(T & p){};
+	};
 };
 
 /**
@@ -67,9 +69,27 @@ std::shared_ptr<T> getShared(std::weak_ptr<T> & p){
         func : When smart-pointer is valid, it is called.
 
 */
+struct isExistObject{
+	template<class T>
+	bool operator()(T v1){
+		return isExist(v1);
+	}
+	
+	template<class T1, class T2>
+	bool operator()(T1 v1, T2 v2){
+		return isExist(v1, v2);
+	}
+
+	template<class T1, class T2>
+	void operator()(std::vector<T1> & v1, T2 v2){
+		return isExist(v1, v2);
+	}
+};
+
+
 template<class T>
 void isExist(T & p){
-	isExist(p, doNothing<typename toShared<T>::type>);
+	isExist(p, doNothing());
 }
 
 template<class T>
@@ -87,9 +107,22 @@ bool isExist(T & p, std::function<void(typename toShared<T>::type &)> func){
 *@param v    : std::vector<shared_ptr or weak_ptr>
         func : When smart-pointer is valid, it is called.
 */
+struct isExistOrEraseObject{
+	template<class T>
+	void operator()(T v){
+		return isExistOrErase(v);
+	}
+
+	template<class T1, class T2>
+	void operator()(T1 v1, T2 v2){
+		return isExistOrErase(v1, v2);
+	}
+};
+
+
 template<class T>
 void isExistOrErase(std::vector<T> & v){
-	isExistOrErase(v, doNothing<typename toShared<T>::type>);
+	isExistOrErase(v, doNothing());
 }
 
 template<class T>
@@ -113,7 +146,7 @@ void isExistOrErase(T & v, std::function<void(typename toShared<T>::type &)> fun
 */
 template<class T, typename Func>
 bool isTrue(T & p, Func checkFunc){
-	return isTrue(p, doNothing<typename toShared<T>::type>, checkFunc);
+	return isTrue(p, doNothing(), checkFunc);
 }
 
 template<class T, typename Func>
@@ -144,7 +177,7 @@ void isTrue(std::vector<T> & v, std::function<void(typename toShared<T>::type &)
 */
 template<class T, typename Func>
 void isTrueOrErase(std::vector<T> & v, Func checkFunc){
-	isTrueOrErase(v, doNothing<typename toShared<T>::type>, checkFunc);
+	isTrueOrErase(v, doNothing(), checkFunc);
 }
 template<class T, typename Func>
 void isTrueOrErase(std::vector<T> & v, std::function<void(typename toShared<T>::type &)> func, Func checkFunc){
@@ -165,7 +198,7 @@ void isTrueOrErase(std::vector<T> & v, std::function<void(typename toShared<T>::
 */
 template<class T, typename Func>
 bool isFalse(T & p, Func checkFunc){
-	return isFalse(p, doNothing<typename toShared<T>::type>, checkFunc);
+	return isFalse(p, doNothing(), checkFunc);
 }
 template<class T, typename Func>
 bool isFalse(T & p, std::function<void(typename toShared<T>::type &)> func, Func checkFunc){
