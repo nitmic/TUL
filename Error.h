@@ -17,14 +17,11 @@ public:
 		MessageBox(NULL, tOutput, __T("Error"), MB_OK);
 	}*/
 	static void printf(tString msg, long line, std::string file){
-		tString tFile;
-		tString tOutput;
-		
 		toStringStream ostr;
-
+		tString tFile(file.begin(), file.end());
 		ostr << __T("file = ") << tFile << __T("line = ") << line << __T(" msg = ") << msg;
 
-		MessageBox(NULL, tOutput.c_str(), __T("Error"), MB_OK);
+		MessageBox(NULL, ostr.str().c_str(), __T("Error"), MB_OK);
 	}
 
 	Error(){};
