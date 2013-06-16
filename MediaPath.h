@@ -2,6 +2,7 @@
 #include <vector>
 #include "tString.h"
 
+
 class MediaPath{
 private:
 	std::vector<tString> paths;
