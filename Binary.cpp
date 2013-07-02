@@ -1,4 +1,4 @@
-#include "Binary.h"
+/*#include "Binary.h"
 #include "Error.h"
 Binary::Binary(const int v){
 	if(v!=0 && v!=1) ERROR_MSG(_T("Argment is not 0 or 1."));
@@ -15,4 +15,4 @@ int Binary::operator~(){
 
 Binary::operator int(){
 	return int(m_v);
-}
+}*/

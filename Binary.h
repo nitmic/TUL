@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 class Binary{
 public:
 	Binary(const int v=0);
@@ -8,4 +8,4 @@ public:
 	operator int();
 private:
 	char m_v;
-};
+};*/
