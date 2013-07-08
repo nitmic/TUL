@@ -1,6 +1,12 @@
 #pragma once
 #include <array>
-#include <Error.h>
+#include "Error.h"
+
+/*
+*@class RingBuffer
+*@ˆÈ‘O‚Ìó‘Ô‚ğ‚¿‚å‚Á‚Æ‚ÌŠÔ•Û‚µ‚Ä‚¨‚«‚½‚¢‚à‚Ì‚É
+*  ˆË‘¶ TUL::Error
+*/
 
 namespace TUL{
 	template<class T, int N>

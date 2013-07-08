@@ -1,6 +1,7 @@
 #include "Error.h"
 #include <Windows.h>
 #include <sstream>
+
 namespace TUL{
 	void Error::printf(const tString msg, const long line, const std::string file){
 		toStringStream ostr;

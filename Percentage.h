@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+*@class Percent
+*@o—ˆ‘¹‚È‚¢
+*/
+
 class Percent{
 public:
 	Percent(double p=0) : m_Percent(p){};

@@ -2,6 +2,11 @@
 #include <vector>
 #include "tString.h"
 
+/*
+*@class MediaPath
+*　複数のディレクトリにまたがってファイルを探索するときに
+*　依存　TUL::tString, boost::filesystem, TUL::Error
+*/
 
 class MediaPath{
 private:

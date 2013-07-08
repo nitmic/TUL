@@ -1,5 +1,12 @@
 #pragma once
 #include "tString.h"
+
+/*
+*@function ERROR_MSG
+*　Errorメッセージ表示。Debug時用。assertでいいかも
+*　依存　TUL::tString, Windows.h
+*/
+
 namespace TUL{
 	namespace Error{
 		enum{

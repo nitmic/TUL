@@ -3,13 +3,19 @@
 #include <tchar.h>
 #include <iostream>
 
-#define DEFAULT_TSTRING_TYPE _TCHAR
+#define TSTRING_TYPE _TCHAR
 
-typedef std::basic_string<DEFAULT_TSTRING_TYPE> tString;
+/*
+*@typedef tString
+*　汎用的な文字の型用に。TSTRING_TYPEを必要に応じて変更
+*/
 
-typedef std::basic_fstream<DEFAULT_TSTRING_TYPE> tfStream;
-typedef std::basic_ofstream<DEFAULT_TSTRING_TYPE> tofStream;
-typedef std::basic_ifstream<DEFAULT_TSTRING_TYPE> tifStream;
-typedef std::basic_stringstream<DEFAULT_TSTRING_TYPE> tStringStream;
-typedef std::basic_ostringstream<DEFAULT_TSTRING_TYPE> toStringStream;
-typedef std::basic_istringstream<DEFAULT_TSTRING_TYPE> tiStringStream;
+
+typedef std::basic_string<TSTRING_TYPE> tString;
+
+typedef std::basic_fstream<TSTRING_TYPE> tfStream;
+typedef std::basic_ofstream<TSTRING_TYPE> tofStream;
+typedef std::basic_ifstream<TSTRING_TYPE> tifStream;
+typedef std::basic_stringstream<TSTRING_TYPE> tStringStream;
+typedef std::basic_ostringstream<TSTRING_TYPE> toStringStream;
+typedef std::basic_istringstream<TSTRING_TYPE> tiStringStream;
