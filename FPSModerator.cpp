@@ -1,4 +1,5 @@
 #include "FPSModerator.h"
+#include "RingBuffer.hpp"
 #include <boost\chrono.hpp>
 #include "RingBuffer.hpp"
 #include <algorithm>
@@ -10,6 +11,7 @@
 namespace TUL{
 	enum{BufferSize = 30};
 	struct FPSModerator::Impl{
+		enum{BufferSize = 30};
 		Impl(unsigned int fps=60) : frame(fps){}
 		boost::chrono::steady_clock::time_point lastTime;
 		RingBuffer<unsigned int, BufferSize> currentFPSs;
@@ -22,7 +24,7 @@ namespace TUL{
 	bool FPSModerator::step(){
 		auto currentTime  = boost::chrono::high_resolution_clock::now();
 		auto pastTime     = (currentTime - __impl__->lastTime) + __impl__->errorTime;
-		auto frameBase = boost::chrono::milliseconds(1000/__impl__->frame);
+		auto frameBase = boost::chrono::nanoseconds((1000*1000*1000)/__impl__->frame);
 
 		if(frameBase <= pastTime){
 			__impl__->lastTime = currentTime;
