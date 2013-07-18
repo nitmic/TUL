@@ -19,6 +19,9 @@ namespace TUL{
 		Degree operator*(double other) const {
 			return Degree(deg * other);
 		}
+		double operator*(Degree other) const {
+			return deg * other.deg;
+		}
 		Degree operator/(double other) const {
 			return Degree(deg / other);
 		}
@@ -57,6 +60,9 @@ namespace TUL{
 		}
 		Radian operator*(double other) const {
 			return Radian(rad * other);
+		}
+		double operator*(Radian other) const {
+			return rad * other.rad;
 		}
 		Radian operator/(double other) const {
 			return Radian(rad / other);
