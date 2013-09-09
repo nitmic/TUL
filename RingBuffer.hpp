@@ -45,7 +45,7 @@ namespace TUL{
 		T & prev(unsigned int x = 1){
 			if(x>=N) ERROR_MSG(_T("x‚ª‘å‚«‚·‚¬‚Ü‚·"));
 			if(x<0) ERROR_MSG(_T("x‚Í”ñ•‰‚Å‚·"));
-			int preIndex = (m_CurrentIndex-x)%N;
+			int preIndex = m_CurrentIndex-x;
 			if(preIndex<0){
 				preIndex += N;
 			}
