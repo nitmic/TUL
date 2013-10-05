@@ -81,6 +81,7 @@
     <ClInclude Include="Error.h" />
     <ClInclude Include="MediaPath.h" />
     <ClInclude Include="Percentage.h" />
+    <ClInclude Include="RingIndex.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Shape.hpp" />
