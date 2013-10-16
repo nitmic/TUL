@@ -75,6 +75,7 @@
   <ItemGroup>
     <ClInclude Include="AngleUnit.h" />
     <ClInclude Include="enumerate.hpp" />
+    <ClInclude Include="FakeFullScreen.h" />
     <ClInclude Include="FPSModerator.h" />
     <ClInclude Include="RingBuffer.hpp" />
     <ClInclude Include="Delegater.hpp" />
