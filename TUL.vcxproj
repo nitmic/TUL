@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AngleUnit.h" />
+    <ClInclude Include="Delay.h" />
     <ClInclude Include="enumerate.hpp" />
     <ClInclude Include="FakeFullScreen.h" />
     <ClInclude Include="FPSModerator.h" />
