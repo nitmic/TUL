@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Boost\boost_1_53_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Boost\boost_1_53_0;C:\FFMpeg\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,6 +78,8 @@
     <ClInclude Include="enumerate.hpp" />
     <ClInclude Include="FakeFullScreen.h" />
     <ClInclude Include="FPSModerator.h" />
+    <ClInclude Include="Movie.h" />
+    <ClInclude Include="Movie.IMPL.h" />
     <ClInclude Include="RingBuffer.hpp" />
     <ClInclude Include="Delegater.hpp" />
     <ClInclude Include="Error.h" />
@@ -96,6 +98,7 @@
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="FPSModerator.cpp" />
     <ClCompile Include="MediaPath.cpp" />
+    <ClCompile Include="Movie.cpp" />
     <ClCompile Include="tul.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
