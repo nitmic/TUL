@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClCompile Include="AngleUnit.cpp" />
     <ClCompile Include="Error.cpp" />
+    <ClCompile Include="FakeFullScreen.cpp" />
     <ClCompile Include="FPSModerator.cpp" />
     <ClCompile Include="MediaPath.cpp" />
     <ClCompile Include="Movie.cpp" />
