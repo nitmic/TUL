@@ -1,7 +1,6 @@
 #include "Movie.IMPL.h"
-//#include <boost\chrono.hpp>
 #include "FPSModerator.h"
-#include <assert.h>
+
 
 namespace TUL{
 	struct MovieDecoder::Impl{

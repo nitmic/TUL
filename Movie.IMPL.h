@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <assert.h>
 
 #include "Movie.h"
 
