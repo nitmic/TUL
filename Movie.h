@@ -18,7 +18,7 @@ extern "C" {
 namespace TUL{
 	class MovieDecoder{
 	public:
-		enum State{Closed, Playing, Paused, Stopped };
+		enum State{Closed, Playing, Stopped };
 
 		MovieDecoder() : m_Width(-1), m_Height(-1){};
 		MovieDecoder(int width, int height) : m_Width(width), m_Height(height){init();}
@@ -31,16 +31,15 @@ namespace TUL{
 		void setScreen(int width, int height);
 		State getState(){return m_State;};
 	
-		bool seek(int tsms);
-		bool seekByFrame(int frame);
+		bool seek(int tsms); // unimplemented
+		bool seekByFrame(int frame); // unimplemented
 	private:
 		struct Impl;
 		std::shared_ptr<Impl> __impl__;
 
 		void init();
 		void setScreen();
-	
-		bool m_NeedResize;
+
 		int m_Width;
 		int m_Height;
 		State m_State;

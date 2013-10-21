@@ -1,5 +1,7 @@
 #include "Movie.IMPL.h"
-#include <boost\chrono.hpp>
+//#include <boost\chrono.hpp>
+#include "FPSModerator.h"
+#include <assert.h>
 
 namespace TUL{
 	struct MovieDecoder::Impl{
@@ -17,7 +19,7 @@ namespace TUL{
 		StreamPtr m_pStreamV;
 	
 		// 速度管理用
-		boost::chrono::time_point<boost::chrono::steady_clock, boost::chrono::steady_clock::duration> m_lastTime;
+		FPSModerator m_Fps;
 
 		// 動画情報保持
 		int m_NumOfFrames;
@@ -56,7 +58,6 @@ namespace TUL{
 		libavInit();
 		close();
 		__impl__ = std::make_shared<Impl>();
-		__impl__->m_lastTime  = boost::chrono::high_resolution_clock::now();
 		setScreen();
 	}
 
@@ -84,7 +85,6 @@ namespace TUL{
 		__impl__.reset();
 
 		m_State = Closed;
-		m_NeedResize = false;
 	}
 
 	bool MovieDecoder::open(std::string fileName){
@@ -108,23 +108,18 @@ namespace TUL{
 			__impl__->m_pStreamV = createStream(file, streamIndex, m_Width, m_Height);
 		}
 	
-		if (__impl__->m_pStreamV==nullptr) return false;
-		/*
-		__impl__->m_pStreamA = std::make_shared<MovieStream>();
-		__impl__->m_pStreamA->parent = file;
-		__impl__->m_pStreamA->StreamIdx = -1;
-		file->Streams.push_back(__impl__->m_pStreamA);
-		*/
+		assert(__impl__->m_pStreamV!=nullptr);
+
+		__impl__->m_Fps.setFPS(1/__impl__->m_SecPerFrame);
 		m_State = Playing;
+
+		return true;
 	}
 
 	uint8_t * MovieDecoder::decode(){
 		if(m_State!=State::Playing) return nullptr;
 		// fps管理
-		auto currentTime = boost::chrono::high_resolution_clock::now();
-		auto interval =  boost::chrono::microseconds((int)(__impl__->m_SecPerFrame*1000*1000));
-		if (currentTime - __impl__->m_lastTime <= interval) return nullptr;
-		__impl__->m_lastTime = currentTime;
+		if(__impl__->m_pFrameOut->data[0] && !__impl__->m_Fps.step()) return nullptr;
 
 		// フレームの入手
 		auto pFrameIn = getNextFrame(__impl__->m_FrameBuffer, __impl__->m_pStreamV, &__impl__->noDecodedBytes);
@@ -137,7 +132,6 @@ namespace TUL{
 		if (__impl__->m_CurrentWidth != m_Width || __impl__->m_CurrentHeight != m_Height) {
 			__impl__->m_CurrentWidth = m_Width;
 			__impl__->m_CurrentHeight = m_Height;
-			m_NeedResize = true;
 			__impl__->m_pImgConvertContext.reset();
 		}
 
@@ -148,7 +142,7 @@ namespace TUL{
 				__impl__->m_pStreamV->CodecCtx->pix_fmt, m_Width, m_Height, PIX_FMT_RGB32, 
 				SWS_FAST_BILINEAR | SWS_CPU_CAPS_MMX2, NULL, NULL, NULL
 			);
-			if(p==nullptr) return nullptr;
+			assert(p!=NULL);
 			__impl__->m_pImgConvertContext = std::shared_ptr<struct SwsContext>(p, SwsContextRelease);
 		}
 
