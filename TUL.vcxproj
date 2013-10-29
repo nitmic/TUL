@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Boost\boost_1_53_0;C:\FFMpeg\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SDL2\include;C:\Boost\boost_1_53_0;C:\FFMpeg\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -86,6 +86,7 @@
     <ClInclude Include="MediaPath.h" />
     <ClInclude Include="Percentage.h" />
     <ClInclude Include="RingIndex.h" />
+    <ClInclude Include="SDLWrapper.h" />
     <ClInclude Include="Singleton.hpp" />
     <ClInclude Include="SmartPointerUtility.hpp" />
     <ClInclude Include="tString.hpp" />
