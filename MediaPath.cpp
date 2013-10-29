@@ -2,11 +2,11 @@
 #include "Error.h"
 #include <boost\filesystem.hpp>
 
-void MediaPath::regist(tString path){
+void MediaPath::regist(TUL::tString path){
 	paths.push_back(path);
 }
 
-tString MediaPath::find(tString filename){
+TUL::tString MediaPath::find(TUL::tString filename){
 	for(auto it=paths.begin();it!=paths.end();it++){
 		boost::system::error_code error;
 		const auto path = boost::filesystem::absolute(filename, *it);
@@ -19,9 +19,9 @@ tString MediaPath::find(tString filename){
 	exit(1);
 }
 
-void MediaPath::registFromFile(tString filepath){
-	tifStream ifs(filepath);
-	tString str;
+void MediaPath::registFromFile(TUL::tString filepath){
+	TUL::tifStream ifs(filepath);
+	TUL::tString str;
 	if(!ifs){
 		ERROR_MSG(_T("MediaPath::registFromFile : file is not found"));
 		return;

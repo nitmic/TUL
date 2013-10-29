@@ -86,12 +86,9 @@
     <ClInclude Include="MediaPath.h" />
     <ClInclude Include="Percentage.h" />
     <ClInclude Include="RingIndex.h" />
-    <ClInclude Include="Rotation.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="Shape.hpp" />
     <ClInclude Include="Singleton.hpp" />
     <ClInclude Include="SmartPointerUtility.hpp" />
-    <ClInclude Include="tString.h" />
+    <ClInclude Include="tString.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AngleUnit.cpp" />

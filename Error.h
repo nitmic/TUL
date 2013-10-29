@@ -1,5 +1,5 @@
 #pragma once
-#include "tString.h"
+#include "tString.hpp"
 
 /*
 *@function ERROR_MSG
@@ -12,7 +12,7 @@ namespace TUL{
 		enum{
 			MAXSIZE = 256
 		};
-		void printf(const tString msg, const long line, const std::string file);
+		void printf(const TUL::tString msg, const long line, const std::string file);
 	};
 };
 
