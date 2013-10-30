@@ -6,6 +6,11 @@
 #include "Singleton.hpp"
 #include "tString.hpp"
 #include <map>
+
+#pragma comment(lib, "SDL2_mixer.lib")
+#pragma comment(lib, "SDL2.lib")
+#pragma comment(lib, "SDL2main.lib")
+
 namespace TUL{
 	class SDLCore : public Singleton<SDLCore>{
 		friend class Singleton<SDLCore>;
