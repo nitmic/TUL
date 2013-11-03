@@ -1,4 +1,5 @@
 #include "FakeFullScreen.h"
+#include <assert.h>
 
 #ifdef WIN32
 namespace TUL{
@@ -14,22 +15,29 @@ namespace TUL{
 
 	void restoreFakeFullScreen(HWND hWnd){
 		if(!isFullscreen) return;
-		isFullscreen = false;
+		
 
 		DEVMODE    devMode;
 		devMode.dmSize       = sizeof(DEVMODE);
 		devMode.dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT;
 		devMode.dmPelsWidth  = defaultDisplayWidth;
 		devMode.dmPelsHeight = defaultDisplayHeight;
-		ChangeDisplaySettings(&devMode, CDS_FULLSCREEN);
+		assert(ChangeDisplaySettings(&devMode, CDS_FULLSCREEN)==DISP_CHANGE_SUCCESSFUL);
 
-		MoveWindow(
+		assert(MoveWindow(
 			hWnd, 
-			defaultWindowLeft,
-			defaultWindowTop,
-			defaultWindowRight,
-			defaultWindowBottom, TRUE
-		);
+			0,
+			0,
+			800,
+			600, FALSE
+		)==true);
+
+		
+		{
+			isFullscreen = false;
+			defaultDisplayHeight = 0;
+			defaultDisplayHeight = 0;
+		}
 	}
 
 	void fakeFullScreen(HWND hWnd, int width, int height){
@@ -37,6 +45,7 @@ namespace TUL{
 	
 		{
 			isFullscreen = true;
+			
 			if(defaultDisplayHeight==0){
 				defaultDisplayWidth = GetSystemMetrics(SM_CXSCREEN);
 				defaultDisplayHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -48,26 +57,27 @@ namespace TUL{
 				defaultWindowBottom = rect.bottom;
 			}
 		}
+
 		SetWindowLong(hWnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
-	
-		//int x = GetSystemMetrics(SM_XVIRTUALSCREEN);
-		//int y = GetSystemMetrics(SM_YVIRTUALSCREEN);
-		//int w = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-		//int h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-		MoveWindow(
-			hWnd, 
-			0,
-			0,
-			width,
-			height, TRUE
-		);
 	
 		DEVMODE    devMode;
 		devMode.dmSize       = sizeof(DEVMODE);
 		devMode.dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT;
 		devMode.dmPelsWidth  = width;
 		devMode.dmPelsHeight = height;
-		ChangeDisplaySettings(&devMode, CDS_FULLSCREEN);
+		assert(ChangeDisplaySettings(&devMode, CDS_FULLSCREEN)==DISP_CHANGE_SUCCESSFUL);
+
+		//int x = GetSystemMetrics(SM_XVIRTUALSCREEN);
+		//int y = GetSystemMetrics(SM_YVIRTUALSCREEN);
+		//int w = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+		//int h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+		assert(MoveWindow(
+			hWnd, 
+			0,
+			0,
+			width,
+			height, FALSE
+		)==true);
 	}
 };
 #endif
