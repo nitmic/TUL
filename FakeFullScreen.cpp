@@ -60,12 +60,6 @@ namespace TUL{
 		devMode.dmPelsWidth  = width;
 		devMode.dmPelsHeight = height;
 		assert(ChangeDisplaySettings(&devMode, CDS_FULLSCREEN)==DISP_CHANGE_SUCCESSFUL);
-		
-
-		//int x = GetSystemMetrics(SM_XVIRTUALSCREEN);
-		//int y = GetSystemMetrics(SM_YVIRTUALSCREEN);
-		//int w = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-		//int h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 	}
 };
 #endif
