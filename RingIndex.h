@@ -67,6 +67,12 @@ namespace TUL{
 			return ri;
 		}
 
+		RingIndex operator-(){
+			RingIndex ri(size);
+			ri = -index;
+			return ri;
+		}
+
 		operator int(){
 			return index;
 		}

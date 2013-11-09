@@ -21,17 +21,17 @@ namespace TUL{
 	typedef std::basic_ostringstream<TSTRING_TYPE> toStringStream;
 	typedef std::basic_istringstream<TSTRING_TYPE> tiStringStream;
 
-	template <class T> tString to_tstring(T in){
+	template <class T> inline tString to_tstring(T in){
 		tStringStream ss;
 		ss << x;
 		return ss.str();
 	}
 
-	template <> tString to_tstring(std::string str){
+	template <> inline  tString to_tstring(std::string str){
 		return tString(str.begin(), str.end());
 	}
 
-	std::string to_string(tString str){
+	inline std::string to_string(tString str){
 		return std::string(str.begin(), str.end());
 	}
 };
