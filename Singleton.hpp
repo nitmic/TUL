@@ -1,6 +1,11 @@
 #pragma once
 #include <memory>
 
+/*
+*@class Singleton
+*@privateŒp³+friend classéŒ¾‚µ‚Äg‚¤
+*/
+
 template<class T>
 class Singleton{
 public:
@@ -25,6 +30,6 @@ template<class T>
 std::shared_ptr<T> Singleton<T>::m_spInstance = nullptr;
 
 template<class T>
-std::shared_ptr<T> & GetSingleton(){
+inline std::shared_ptr<T> & GetSingleton(){
 	return Singleton<T>::getInstance();
 }

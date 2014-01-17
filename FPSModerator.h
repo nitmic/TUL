@@ -3,7 +3,8 @@
 
 /*
 *@class FPSModerator
-*　依存 boost::chrono http://d.hatena.ne.jp/faith_and_brave/20080908/
+*　FPSModerator::stepで1f経過したかどうかを判定。Sleepはしない
+*　依存 windows以外は boost::chrono http://d.hatena.ne.jp/faith_and_brave/20080908/
 */
 
 namespace TUL{
@@ -15,6 +16,6 @@ namespace TUL{
 		FPSModerator(unsigned int fps=60);
 	private:
 		struct Impl;
-		std::shared_ptr<Impl> __impl__;
+		std::shared_ptr<Impl> self;
 	};
 };

@@ -50,7 +50,7 @@ namespace TUL{
 	}
 
 	void AVFrameRelease(AVFrame * p){
-		av_free(p);
+		avcodec_free_frame(&p);
 	}
 
 	void SwsContextRelease(struct SwsContext * p){
@@ -58,21 +58,25 @@ namespace TUL{
 	}
 
 	namespace{
-		FramePtr initFrame(){
+		AVFrame * initFrame(){
 			// フレーム領域を確保
 			AVFrame *frame_raw = avcodec_alloc_frame();
 			assert(frame_raw!=nullptr);
-			return std::shared_ptr<AVFrame>(frame_raw, AVFrameRelease);
+
+			std::fill(frame_raw->data, frame_raw->data+8, nullptr);
+
+			return frame_raw;
 		}
 
 		FramePtr initFrame(int width, int height, std::shared_ptr<uint8_t> * pBuffer){
-			auto frame = initFrame();
-
 			// 保存用バッファを確保
 			int numBytes  = avpicture_get_size(PIX_FMT_RGB32, width, height);
 			auto buffer_raw = (uint8_t *)av_malloc(numBytes * sizeof(uint8_t));
 			assert(buffer_raw!=nullptr);
 			*pBuffer = std::shared_ptr<uint8_t>(buffer_raw, av_free);
+
+			auto raw_frame = initFrame();
+			auto frame = std::shared_ptr<AVFrame>(raw_frame, AVFrameRelease);
 
 			// バッファをフレームへセット
 			avpicture_fill(
@@ -131,7 +135,7 @@ namespace TUL{
 			}
 		}
 
-		bool getNextPacket(std::vector<AVFrame> & frameBuffer, FilePtr file, StreamPtr streamV, int * noDecodedBytes){
+		bool getNextPacket(std::vector<FramePtr> & frameBuffer, FilePtr file, StreamPtr streamV, int * noDecodedBytes){
 			AVPacket packet;
 			while(av_read_frame(file->FmtCtx.get(), &packet) >= 0){
 				for(auto it=file->Streams.begin();it!=file->Streams.end(); it++) {
@@ -140,13 +144,22 @@ namespace TUL{
 				
 					// 対象のストリームでなければ飛ばす
 					if (packet.stream_index!=streamV->StreamIdx) continue;
-				
-					auto frame = initFrame();
+			
 					*noDecodedBytes += packet.size;
 					uint8_t * rawData = packet.data;
+					
+						
+
 					while (*noDecodedBytes > 0) {
 						/* パケットからフレームを復号する  */
 						int isFinish = 0;
+						auto ref_frames = (*it)->CodecCtx->refcounted_frames;
+						auto frame = std::shared_ptr<AVFrame>(initFrame(), [ref_frames](AVFrame * p){
+							if(ref_frames==1){
+								av_frame_unref(p);
+							}
+							AVFrameRelease(p);
+						});
 						auto bytesDecoded = avcodec_decode_video2((*it)->CodecCtx, frame.get(), &isFinish, &packet);
 
 						*noDecodedBytes -= bytesDecoded;
@@ -154,9 +167,9 @@ namespace TUL{
 					
 						/* 復号がまだの場合は次のパケットまで処理を飛ばす */
 						if (!isFinish) continue;
-
-						frameBuffer.push_back(*frame);
-
+						
+						av_free_packet(&packet);
+						frameBuffer.push_back(frame);
 						return true;
 					}
 				}
@@ -165,19 +178,18 @@ namespace TUL{
 			return false;
 		}
 	
-		FramePtr getNextFrame(std::vector<AVFrame> & frameBuffer, StreamPtr streamV, int * noDecodedBytes){
+		FramePtr getNextFrame(std::vector<FramePtr> & frameBuffer, StreamPtr streamV, int * noDecodedBytes){
 			// フレームを拾ってくる
 			while (frameBuffer.size()==0) {
 				if (!getNextPacket(frameBuffer, streamV->parent.lock(), streamV, noDecodedBytes)) {
 					break;
 				}
 			}
-		
 			if (frameBuffer.empty()) return nullptr;
 
-			auto output = initFrame();
-			*output = frameBuffer.back();
+			auto output = frameBuffer.back();
 			frameBuffer.erase(frameBuffer.begin());
+			
 			return output;
 		}
 	};

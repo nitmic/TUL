@@ -1,4 +1,6 @@
 #include "Movie.IMPL.h"
+
+#include <deque>
 #include "FPSModerator.h"
 
 
@@ -38,7 +40,7 @@ namespace TUL{
 		SwsCtxPtr m_pImgConvertContext;
 	
 		int noDecodedBytes;
-		std::vector<AVFrame> m_FrameBuffer;
+		std::vector<FramePtr> m_FrameBuffer;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +128,6 @@ namespace TUL{
 			m_State = State::Stopped;
 			return nullptr;
 		}
-
 		// ‰æ–Ê‚ÌƒTƒCƒY‚ª•Ï‚í‚Á‚Ä‚¢‚½‚ç
 		if (__impl__->m_CurrentWidth != m_Width || __impl__->m_CurrentHeight != m_Height) {
 			__impl__->m_CurrentWidth = m_Width;
@@ -150,7 +151,6 @@ namespace TUL{
 			__impl__->m_pImgConvertContext.get(), pFrameIn->data, pFrameIn->linesize, 0,
 			__impl__->m_pStreamV->CodecCtx->height, __impl__->m_pFrameOut->data, __impl__->m_pFrameOut->linesize
 		);
-
 		return __impl__->m_pFrameOut->data[0];
 	}
 

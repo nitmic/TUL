@@ -1,47 +1,73 @@
 #include "FPSModerator.h"
-#include "RingBuffer.hpp"
-#include <boost\chrono.hpp>
-#include "RingBuffer.hpp"
+
+#include <array>
 #include <algorithm>
-/*
-#include <Windows.h>
-#include <mmsystem.h>
-#pragma comment(lib, "winmm.lib")
-*/
+#include <numeric>
+
+#ifdef _MSC_VER
+	#include <Windows.h>
+#else
+	#include <boost\chrono.hpp>
+#endif
+
 namespace TUL{
-	enum{BufferSize = 30};
 	struct FPSModerator::Impl{
 		enum{BufferSize = 30};
-		Impl(unsigned int fps=60) : frame(fps){}
-		boost::chrono::steady_clock::time_point lastTime;
-		RingBuffer<unsigned int, BufferSize> currentFPSs;
+		
 		unsigned int frame;	//ê›íËFPS
-		boost::chrono::duration<int_least64_t, boost::nano> errorTime;
+		#ifdef _MSC_VER
+			int fps, lastFPS;
+			int lastTime;
+			int errorTime;
+			int currentTime;
+			int pastTime;
+		#else
+			boost::chrono::duration<int_least64_t, boost::nano> errorTime;
+			boost::chrono::steady_clock::time_point lastTime;
+		#endif
+		std::array<unsigned int, BufferSize> currentFPSs;
+		int bufferIter;
 	};
+
 	FPSModerator::FPSModerator(unsigned int settingFPS){
-		__impl__ = std::make_shared<Impl>(settingFPS);
+		self = std::make_shared<Impl>();
+		self->frame = settingFPS;
+		#ifdef _MSC_VER
+			self->lastFPS = -1;
+			self->lastTime  = 0;
+			self->errorTime = 0;
+		#endif
+		self->currentFPSs.fill(0);
+		self->bufferIter = 0;
 	}
 	bool FPSModerator::step(){
-		auto currentTime  = boost::chrono::high_resolution_clock::now();
-		auto pastTime     = (currentTime - __impl__->lastTime) + __impl__->errorTime;
-		auto frameBase = boost::chrono::nanoseconds((1000*1000*1000)/__impl__->frame);
-
+		#ifdef _MSC_VER	
+			auto currentTime  = timeGetTime();
+			auto pastTime     = (currentTime - self->lastTime) * 3 + self->errorTime;
+			auto frameBase = 3000/self->frame;
+		#else
+			auto currentTime  = boost::chrono::high_resolution_clock::now();
+			auto pastTime     = (currentTime - self->lastTime) + self->errorTime;
+			auto frameBase = boost::chrono::nanoseconds((1000*1000*1000)/self->frame);
+		#endif
 		if(frameBase <= pastTime){
-			__impl__->lastTime = currentTime;
-			__impl__->currentFPSs.update(boost::chrono::milliseconds(1000) / pastTime);
-			__impl__->errorTime = pastTime % frameBase;
+			self->lastTime = currentTime;
+			self->errorTime = pastTime % frameBase;
+			
+			#ifdef _MSC_VER
+			self->currentFPSs[self->bufferIter] = 1000/pastTime;
+			#else
+				self->currentFPSs[self->bufferIter] = boost::chrono::milliseconds(1000) / pastTime;
+			#endif
+			self->bufferIter = (self->bufferIter+1)%Impl::BufferSize;
 			return true;
 		}
 		return false;
 	}
 	void FPSModerator::setFPS(unsigned int fps){
-		__impl__->frame = fps;
+		self->frame = fps;
 	}
 	unsigned int FPSModerator::getActualFPS(){
-		int sum = 0;
-		for(auto it=__impl__->currentFPSs.begin(); it!=__impl__->currentFPSs.end(); it++){
-			sum += *it;
-		}
-		return sum/BufferSize;
+		return std::accumulate(self->currentFPSs.begin(), self->currentFPSs.end(), 0) / Impl::BufferSize;
 	}
 };
